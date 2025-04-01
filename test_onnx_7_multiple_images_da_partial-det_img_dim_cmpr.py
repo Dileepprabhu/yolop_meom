@@ -1,12 +1,12 @@
 import os
 import cv2
-import torch
+# import torch
 import argparse
 import onnxruntime as ort
 import numpy as np
-import matplotlib.pyplot as plt
-import onnx
-from onnx_opcounter import calculate_params
+# import matplotlib.pyplot as plt
+# import onnx
+# from onnx_opcounter import calculate_params
 import time
 
 def resize_unscale(img, new_shape=(640, 640), color=114):
