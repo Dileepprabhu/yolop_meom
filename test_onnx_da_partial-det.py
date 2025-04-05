@@ -9,7 +9,7 @@ import numpy as np
 # from onnx_opcounter import calculate_params
 import time
 
-def resize_unscale(img, new_shape=(640, 640), color=114):
+def resize_unscale(img, new_shape=(320, 320), color=114):
 
     shape = img.shape[:2]  # current shape [height, width]
     if isinstance(new_shape, int):
