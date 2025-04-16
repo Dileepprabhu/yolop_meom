@@ -70,36 +70,16 @@ def infer_yolop(ort_session,img_path, model_file, input_dim):
 
     print(img.shape)
 
-    # inference: (1,n,6) (1,2,640,640) (1,2,640,640)
     da_seg_out = ort_session.run(
         ['lane_line_seg'],
         input_feed={"images": img}
     )[0]
-
-    # print(da_seg_out.shape)
 
     # select da & ll segment area.
     da_seg_out = da_seg_out[:, :, dh:dh + new_unpad_h, dw:dw + new_unpad_w]
 
     da_seg_mask = np.argmax(da_seg_out, axis=1)[0]  # (?,?) (0|1)
     # print(da_seg_mask.shape)
-
-    # color_area = np.zeros((new_unpad_h, new_unpad_w, 3), dtype=np.uint8)
-    # color_area[da_seg_mask == 1] = [0, 255, 0]
-    # color_seg = color_area
-
-    # # convert to BGR
-    # color_seg = color_seg[..., ::-1]
-    # color_mask = np.mean(color_seg, 2)
-    # img_merge = canvas[dh:dh + new_unpad_h, dw:dw + new_unpad_w, :]
-    # img_merge = img_merge[:, :, ::-1]
-
-    # # merge: resize to original size
-    # img_merge[color_mask != 0] = \
-    # img_merge[color_mask != 0] * 0.5 + color_seg[color_mask != 0] * 0.5
-    # img_merge = img_merge.astype(np.uint8)
-    # img_merge = cv2.resize(img_merge, (width, height),
-    #                        interpolation=cv2.INTER_LINEAR)
 
     # da: resize to original size
     da_seg_mask = da_seg_mask * 255
@@ -125,14 +105,10 @@ if __name__ == "__main__":
     onnx_paths = [
         './weights/yolop-320-320.onnx',
         #'./weights/yolop-640-640.onnx',
-        #'./weights/yolop_da-640-640.onnx',
-        #'./runs/BddDataset/1_epoch_checkpoint.onnx',
+        #'./weights/yolop-da-ll-320-320.onnx',
         #'./weights/yolop_da_ll-640-640.onnx',
-        #'./runs/BddDataset/checkpoint_da_112.onnx',
         #'./weights/yolop_det_da-640-640.onnx',
-        #'./decoder_combo_experimenting/da_no-det-decoder_320-320.onnx',
-        #'./decoder_combo_experimenting/da_no-det-decoder_640-640.onnx',
-        #./decoder_combo_experimenting/da_no-det-decoder_1280-1280.onnx',
+
     ]
 
     for onnx_path in onnx_paths[:]:
